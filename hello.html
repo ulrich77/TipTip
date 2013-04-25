@@ -1,0 +1,192 @@
+<html>
+    
+    <body>
+        <div id="test">hey</div>
+        <script type="text/javascript" src="">
+window.onload = function()
+{
+ var p1 = '#0000ff', p2 = '#ff0000', color = p1, gameOver = false;
+
+ function attach(element, type, fn)
+ {
+   if(element.addEventListener)
+   {
+     element.addEventListener(type, fn, false);
+   }
+   else if(element.attachEvent)
+   {
+     element.attachEvent('on' + type, fn);
+   }
+ }
+
+ function check4End(x,y)
+ {
+   var i, n, m, counter,
+        checkColor = document.getElementById(x+'_'+y).getAttribute('title');
+
+   function checkCounter(c)
+   {
+     if(c >= 4)
+     {
+       document.getElementById('infotext').innerHTML = '&nbsp;&nbsp;hat gewonnen';
+       gameOver = true;
+     }
+   }
+
+   //horizontal -----------------------
+   counter = 0;
+   for(i=0;i<7;i++)
+   {
+     if(document.getElementById(i+'_'+y).getAttribute('title') === checkColor)
+     {
+       counter++;
+     }
+     else
+     {
+       counter = 0;
+     }
+
+     checkCounter(counter);
+   }
+
+   //vertikal -----------------------
+   counter = 0;
+   for(i=0;i<6;i++)
+   {
+     if(document.getElementById(x+'_'+i).getAttribute('title') === checkColor)
+     {
+       counter++;
+     }
+     else
+     {
+       counter = 0;
+     }
+
+     checkCounter(counter);
+   }
+
+   //diagonal 1 -----------------------
+   counter = 0;
+   n = x;
+   m = y;
+
+   while(n>0 && m>0)
+   {
+     n--;
+     m--;
+   }
+
+   for(i=0;i<6;i++)
+   {
+     if(document.getElementById(n+'_'+m))
+     {
+       if(document.getElementById(n+'_'+m).getAttribute('title') === checkColor)
+       {
+         counter++;
+       }
+       else
+       {
+         counter = 0;
+       }
+
+       checkCounter(counter);
+
+       n++;
+       m++;
+     }
+     else
+     {
+       break;
+     }
+   }
+
+   //diagonal 2 -----------------------
+   counter = 0;
+   n = x;
+   m = y;
+
+   while(n>0 && m<5)
+   {
+     n--;
+     m++;
+   }
+
+   for(i=0;i<6;i++)
+   {
+     if(document.getElementById(n+'_'+m))
+     {
+       if(document.getElementById(n+'_'+m).getAttribute('title') === checkColor)
+       {
+         counter++;
+       }
+       else
+       {
+         counter = 0;
+       }
+
+       checkCounter(counter);
+
+       n++;
+       m--;
+     }
+     else
+     {
+       break;
+     }
+   }
+
+ }
+
+ function init()
+ {
+   var n, el = document.getElementsByTagName('body')[0];
+
+   document.getElementById('info').style.backgroundColor = color;
+
+   for(n=0;n<el.childNodes.length;n++)
+   {
+     if(el.childNodes[n])
+     {
+       attach(el.childNodes[n], 'click', function() {
+
+         if(gameOver === false)
+         {
+           var i, col = this.getAttribute('class').replace('col','');
+
+           for(i=5;i>=0;i--)
+           {
+             if(document.getElementById(col+'_'+i).getAttribute('title') === '')
+             {
+               document.getElementById(col+'_'+i).style.backgroundColor = color;
+               document.getElementById(col+'_'+i).setAttribute('title',color);
+               if(color === p1)
+               {
+                 color = p2;
+               }
+               else
+               {
+                 color = p1;
+               }
+               break;
+             }
+           }
+
+           check4End(col,i);
+
+           if(gameOver === false)
+           {
+             document.getElementById('info').style.backgroundColor = color;
+           }
+         }
+
+     });
+   }
+ }
+}
+
+init();
+};
+</script>
+         
+    </body>
+</html>
